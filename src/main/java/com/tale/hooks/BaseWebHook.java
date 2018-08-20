@@ -79,9 +79,9 @@ public class BaseWebHook implements WebHook {
                 request.session().attribute(TaleConst.LOGIN_SESSION_KEY, user);
             }
         }
-        if (uri.startsWith(TaleConst.ADMIN_URI) && !uri.startsWith(TaleConst.LOGIN_URI)) {
+        if (uri.startsWith(TaleConst.ADMIN_URI) && !uri.startsWith(TaleConst.ADMIN_LOGIN_URI)) {
             if (null == user) {
-                response.redirect(TaleConst.LOGIN_URI);
+                response.redirect(TaleConst.ADMIN_LOGIN_URI);
                 return false;
             }
             request.attribute(TaleConst.PLUGINS_MENU_NAME, TaleConst.PLUGIN_MENUS);

@@ -10,7 +10,6 @@ import com.blade.mvc.http.Request;
 import com.blade.mvc.http.Response;
 import com.blade.mvc.http.Session;
 import com.blade.mvc.ui.RestResponse;
-import com.tale.annotation.SysLog;
 import com.tale.bootstrap.TaleConst;
 import com.tale.controller.BaseController;
 import com.tale.model.entity.Users;
@@ -22,14 +21,14 @@ import lombok.extern.slf4j.Slf4j;
 import static io.github.biezhi.anima.Anima.select;
 
 /**
- * 登录，退出
+ * 管理页面登录，退出
  * Created by biezhi on 2017/2/21.
  */
 @Slf4j
 @Path(value = "admin", restful = true)
 public class AuthController extends BaseController {
 
-    @SysLog("登录后台")
+    //@SysLog("登录后台")
     @PostRoute("login")
     public RestResponse<?> doLogin(LoginParam loginParam, Request request,
                                    Session session, Response response) {
@@ -55,6 +54,9 @@ public class AuthController extends BaseController {
 
             if (null == user) {
                 return RestResponse.fail("用户名或密码错误");
+            }
+            if (!TaleConst.ADMIN_USER_GROUP_NAME.equals(user.getGroupName())) {
+                return RestResponse.fail("用户权限不够");
             }
             session.attribute(TaleConst.LOGIN_SESSION_KEY, user);
             if (StringKit.isNotBlank(loginParam.getRememberMe())) {

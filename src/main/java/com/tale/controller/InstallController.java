@@ -58,6 +58,7 @@ public class InstallController extends BaseController {
         temp.setUsername(installParam.getAdminUser());
         temp.setPassword(installParam.getAdminPwd());
         temp.setEmail(installParam.getAdminEmail());
+        temp.setGroupName(TaleConst.ADMIN_USER_GROUP_NAME);
 
         siteService.initSite(temp);
 

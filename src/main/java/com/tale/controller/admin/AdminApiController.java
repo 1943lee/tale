@@ -58,6 +58,9 @@ public class AdminApiController extends BaseController {
     @Inject
     private SiteService siteService;
 
+    @Inject
+    private UserService userService;
+
     @GetRoute("logs")
     public RestResponse sysLogs(PageParam pageParam) {
         return RestResponse.ok(select().from(Logs.class).order(Logs::getId, OrderBy.DESC).page(pageParam.getPage(), pageParam.getLimit()));
@@ -149,6 +152,14 @@ public class AdminApiController extends BaseController {
         contents.setType(Types.PAGE);
         contentsService.updateArticle(contents);
         return RestResponse.ok(cid);
+    }
+
+    @SysLog("删除页面")
+    @PostRoute("page/delete/:cid")
+    public RestResponse<?> deletePage(@PathParam Integer cid) {
+        contentsService.delete(cid);
+        siteService.cleanCache(Types.C_STATISTICS);
+        return RestResponse.ok();
     }
 
     @GetRoute("categories")
@@ -416,6 +427,54 @@ public class AdminApiController extends BaseController {
             byte[] rf_wiki_byte = content.getBytes("UTF-8");
             Files.write(Paths.get(filePath), rf_wiki_byte);
         }
+        return RestResponse.ok();
+    }
+
+    /**
+     * 获取普通用户列表
+     * @param pageParam
+     * @return
+     */
+    @GetRoute("users")
+    public RestResponse usersList(PageParam pageParam) {
+        Page<Users> users = userService.getUsers(pageParam);
+        return RestResponse.ok(users);
+    }
+
+    @SysLog("添加用户")
+    @PostRoute("users/new")
+    public RestResponse<?> newUser(@BodyParam Contents contents) {
+
+        CommonValidator.valid(contents);
+
+        Users users = this.user();
+        contents.setType(Types.PAGE);
+        contents.setAllowPing(false);
+        contents.setAuthorId(users.getUid());
+        contentsService.publish(contents);
+        siteService.cleanCache(Types.C_STATISTICS);
+        return RestResponse.ok();
+    }
+
+    @SysLog("修改用户")
+    @PostRoute("users/update")
+    public RestResponse<?> updateUser(@BodyParam Contents contents) {
+        CommonValidator.valid(contents);
+
+        if (null == contents.getCid()) {
+            return RestResponse.fail("缺少参数，请重试");
+        }
+        Integer cid = contents.getCid();
+        contents.setType(Types.PAGE);
+        contentsService.updateArticle(contents);
+        return RestResponse.ok(cid);
+    }
+
+    @SysLog("删除用户")
+    @PostRoute("page/delete/:cid")
+    public RestResponse<?> deleteUser(@PathParam Integer cid) {
+        contentsService.delete(cid);
+        siteService.cleanCache(Types.C_STATISTICS);
         return RestResponse.ok();
     }
 

@@ -83,7 +83,7 @@ public class TaleConst {
     /**
      * 后台登录地址
      */
-    public static final String LOGIN_URI = "/admin/login";
+    public static final String ADMIN_LOGIN_URI = "/admin/login";
 
     /**
      * 插件菜单 Attribute Name
@@ -114,4 +114,14 @@ public class TaleConst {
     public static final String OPTION_ALLOW_INSTALL       = "allow_install";
     public static final String OPTION_ALLOW_COMMENT_AUDIT = "allow_comment_audit";
     public static final String OPTION_ALLOW_CLOUD_CDN     = "allow_cloud_CDN";
+
+    /**
+     * 用户组-管理员
+     */
+    public static final String ADMIN_USER_GROUP_NAME = "admin";
+
+    /**
+     * 用户组-普通用户
+     */
+    public static final String NORMAL_USER_GROUP_NAME = "normal";
 }
