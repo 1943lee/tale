@@ -67,6 +67,11 @@ public class PagesController extends BaseController {
         return "admin/page/edit.html";
     }
 
+    @GetRoute("/users/edit/:cid")
+    public String editUser(@PathParam String cid) {
+        return "admin/users/edit.html";
+    }
+
     @GetRoute("login")
     public String login(Response response) {
         if (null != this.user()) {

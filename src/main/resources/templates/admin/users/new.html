@@ -1,4 +1,4 @@
-#include('../header.html',{active: 'users', title:'添加用户'})
+#include('../header.html',{active: 'users', title:'用户管理'})
 #include('../article/_header.html')
 <div id="app" class="row" v-cloak>
     <loading :active.sync="isLoading" :can-cancel="true"></loading>
@@ -8,54 +8,89 @@
                 <h3 class="panel-title">添加用户</h3>
             </div>
             <div class="panel-body">
-                <!-- 添加用户表单，带验证 -->
-                <form id="user-add-validation-form">
-                    ${_csrf_token_input}
-                    <div>
-                        <div class="form-group clearfix">
-                            <label class="col-md-3 control-label">* 用户名</label>
-                            <div class="col-md-8">
-                                <input class="form-control" name="username" type="text" placeholder="请输入用户登录名"
-                                       required aria-required="true" rangelength="[4,20]"/>
-                            </div>
-                        </div>
-                        <div class="form-group clearfix">
-                            <label class="col-md-3 control-label">* 登录密码</label>
-                            <div class="col-md-8">
-                                <input class="form-control" id="siteUrl" name="siteUrl" type="text"
-                                       required aria-required="true" rangelength="[6,32]" placeholder="请输入6-32位密码"/>
-                            </div>
-                        </div>
-                        <div class="form-group clearfix">
-                            <label class="col-md-3 control-label">nbsp;&nbsp;姓名</label>
-                            <div class="col-md-8">
-                                <input class="form-control" name="adminUser" type="text"
-                                       placeholder="请输入姓名"/>
-                            </div>
-                        </div>
-                        <div class="form-group clearfix">
-                            <label class="col-md-3 control-label">&nbsp;&nbsp;邮箱</label>
-                            <div class="col-md-8">
-                                <input class="form-control" name="adminEmail" type="email"
-                                       placeholder="请输入管理员邮箱"/>
-                            </div>
+                <form id="user-form">
+                    <div class="form-group clearfix">
+                        <label class="col-md-3 control-label">* 账号</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" required aria-required="true"
+                                   rangelength="[4,20]" placeholder="请输入4-20位用户名"/>
                         </div>
                     </div>
+                    <div class="form-group clearfix">
+                        <label class="col-md-3 control-label">* 密码</label>
+                        <div class="col-md-8">
+                            <input id="password1" name="adminPwd" class="form-control"
+                                   required aria-required="true" rangelength="[6,32]" placeholder="请输入6-32位密码"/>
+                        </div>
+                    </div>
+                    <div class="form-group clearfix">
+                        <label class="col-md-3 control-label">姓名</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" name="screenName" placeholder="输入您的姓名"
+                                   required aria-required="true"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-3 control-label">邮箱</label>
+                        <div class="col-md-9">
+                            <input type="text" class="form-control" name="email" placeholder="输入您的邮箱"
+                                   value="${login_user.email}" required aria-required="true"/>
+                        </div>
+                    </div>
+                    <div class="clearfix pull-right">
+                        <button type="button" class="btn btn-primary waves-effect waves-light" onclick="newUser()">
+                            保存信息
+                        </button>
+                    </div>
                 </form>
-            </div>  <!-- End panel-body -->
+            </div>
         </div>
     </div>
 </div>
 
 #include('../article/_footer.html')
-<script src="${cdnURL()}/plugins/jquery/3.2.1/jquery.min.js"></script>
-<script src="${cdnURL()}/plugins/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="${cdnURL()}/plugins/vue/vue.min.js"></script>
-<script src="${cdnURL()}/plugins/vue-loading/vue-loading.min.js"></script>
-<script src="${cdnURL()}/plugins/axios/axios.min.js"></script>
-<script src="${cdnURL()}/plugins/limonte-sweetalert2/6.4.1/sweetalert2.min.js"></script>
 <script src="${cdnURL()}/plugins/jquery-validate/1.15.1/jquery.validate.min.js"></script>
 <script src="${cdnURL()}/plugins/jquery-validate/1.15.1/localization/messages_zh.min.js"></script>
-<script src="${cdnURL()}/plugins/jquery-steps/1.1.0/jquery.steps.min.js"></script>
+<script>
+    var tale = new $.tale();
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            articlePage: {},
+            isLoading: true
+        },
+        beforeCreate: function () {
+            vueLoding = this.$loading.show();
+        },
+        methods: {
+            newUser: function (cid) {
+                var param = $('#user-form').serialize();
+                tale.post({
+                    url : '/admin/users/new',
+                    data: param,
+                    success: function (result) {
+                        if(result && result.success){
+                            tale.alertOk({
+                                text: '添加用户成功',
+                                then: function () {
+                                    setTimeout(function () {
+                                        window.location.href = '/admin/users';
+                                    }, 500);
+                                }
+                            });
+                        } else {
+                            tale.alertError(result.msg || '添加用户失败');
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    $(document).ready(function () {
+        vm.isLoading = false;
+        vueLoding.hide();
+    });
+</script>
 </body>
 </html>
