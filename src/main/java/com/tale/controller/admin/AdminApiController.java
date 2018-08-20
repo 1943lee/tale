@@ -1,6 +1,5 @@
 package com.tale.controller.admin;
 
-import com.blade.Blade;
 import com.blade.Environment;
 import com.blade.ioc.annotation.Inject;
 import com.blade.kit.JsonKit;
@@ -131,7 +130,7 @@ public class AdminApiController extends BaseController {
 
         Users users = this.user();
         contents.setType(Types.PAGE);
-        contents.setAllowPing(true);
+        contents.setAllowPing(false);
         contents.setAuthorId(users.getUid());
         contentsService.publish(contents);
         siteService.cleanCache(Types.C_STATISTICS);

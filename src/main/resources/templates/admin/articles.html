@@ -37,8 +37,9 @@
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
-                                    <th width="35%">文章标题</th>
+                                    <th width="25%">文章标题</th>
                                     <th width="15%">发布时间</th>
+                                    <th width="15%">修改时间</th>
                                     <th>浏览量</th>
                                     <th>所属分类</th>
                                     <th width="8%">发布状态</th>
@@ -51,6 +52,7 @@
                                         <a :href="'/admin/article/edit/' + item.cid">{{ item.title }}</a>
                                     </td>
                                     <td>{{ item.created | formatUnix }}</td>
+                                    <td>{{ item.modified | formatUnix }}</td>
                                     <td>{{ item.hits }}</td>
                                     <td>{{ item.categories }}</td>
                                     <td>

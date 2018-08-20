@@ -16,7 +16,7 @@ var vm = new Vue({
             status: 'draft',
             fmtType: 'markdown',
             allowComment: true,
-            allowPing: true,
+            allowPing: false,
             allowFeed: true,
             createdTime: moment().format('YYYY-MM-DD HH:mm:ss')
         },

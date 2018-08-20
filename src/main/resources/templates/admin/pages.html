@@ -19,7 +19,8 @@
                             <tr>
                                 <th>页面名称</th>
                                 <th>页面路径</th>
-                                <th width="20%">发布时间</th>
+                                <th width="15%">发布时间</th>
+                                <th width="15%">修改时间</th>
                                 <th width="12%">发布状态</th>
                                 <th>操作</th>
                             </tr>
@@ -29,6 +30,7 @@
                                 <td>{{ item.title }}</td>
                                 <td>{{ item.slug }}</td>
                                 <td>{{ item.created | formatUnix }}</td>
+                                <td>{{ item.modified | formatUnix }}</td>
                                 <td>
                                     <span v-show="item.status == 'publish'">已发布</span>
                                     <span v-show="item.status == 'draft'">草稿</span>

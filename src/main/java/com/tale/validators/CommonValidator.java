@@ -78,8 +78,8 @@ public class CommonValidator {
 
         Validators.moreThan(4).test(param.getUsername()).throwIfInvalid("用户名");
         Validators.lessThan(20).test(param.getUsername()).throwIfInvalid("用户名");
-        Validators.moreThan(6).test(param.getPassword()).throwIfInvalid("用户名");
-        Validators.lessThan(14).test(param.getPassword()).throwIfInvalid("用户名");
+        Validators.moreThan(6).test(param.getPassword()).throwIfInvalid("密码");
+        Validators.lessThan(32).test(param.getPassword()).throwIfInvalid("密码");
     }
 
     public static void valid(InstallParam param) {
@@ -91,8 +91,8 @@ public class CommonValidator {
 
         Validators.notEmpty().test(param.getAdminPwd()).throwIfInvalid("管理员密码");
 
-        Validators.moreThan(6).test(param.getAdminPwd()).throwIfInvalid("请输入6-14位密码");
-        Validators.lessThan(14).test(param.getAdminPwd()).throwIfInvalid("请输入6-14位密码");
+        Validators.moreThan(6).test(param.getAdminPwd()).throwIfInvalid("请输入6-32位密码");
+        Validators.lessThan(32).test(param.getAdminPwd()).throwIfInvalid("请输入6-32位密码");
         if (StringKit.isNotEmpty(param.getAdminEmail())) {
             Validators.isEmail().test(param.getAdminEmail()).throwIfInvalid("电子邮箱");
         }
