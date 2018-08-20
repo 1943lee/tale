@@ -53,8 +53,8 @@ public class SystemController extends BaseController {
         if (!users.getPassword().equals(EncryptKit.md5(users.getUsername() + old_password))) {
             return RestResponse.fail("旧密码错误");
         }
-        if (password.length() < 6 || password.length() > 14) {
-            return RestResponse.fail("请输入6-14位密码");
+        if (password.length() < 6 || password.length() > 32) {
+            return RestResponse.fail("请输入6-32位密码");
         }
 
         Users  temp = new Users();
