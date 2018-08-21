@@ -443,16 +443,18 @@ public class AdminApiController extends BaseController {
 
     @SysLog("添加用户")
     @PostRoute("users/new")
-    public RestResponse<?> newUser(@BodyParam Contents contents) {
+    public RestResponse<?> newUser(@BodyParam Users user) {
 
-        CommonValidator.valid(contents);
+        CommonValidator.valid(user);
+        if(this.user().getUsername().endsWith(user.getUsername())) {
+            return RestResponse.fail("不能添加当前用户名");
+        }
+        long count = userService.countByUsername(Users::getUsername, user.getUsername());
+        if(count > 0) {
+            return RestResponse.fail("用户名已存在");
+        }
 
-        Users users = this.user();
-        contents.setType(Types.PAGE);
-        contents.setAllowPing(false);
-        contents.setAuthorId(users.getUid());
-        contentsService.publish(contents);
-        siteService.cleanCache(Types.C_STATISTICS);
+
         return RestResponse.ok();
     }
 
