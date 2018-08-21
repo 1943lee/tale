@@ -63,7 +63,7 @@ public class AdminApiController extends BaseController {
 
     @GetRoute("logs")
     public RestResponse sysLogs(PageParam pageParam) {
-        return RestResponse.ok(select().from(Logs.class).order(Logs::getId, OrderBy.DESC).page(pageParam.getPage(), pageParam.getLimit()));
+        return RestResponse.ok(select(Logs::getAction, Logs::getCreated).from(Logs.class).order(Logs::getId, OrderBy.DESC).page(pageParam.getPage(), pageParam.getLimit()));
     }
 
     @GetRoute("articles/:cid")
