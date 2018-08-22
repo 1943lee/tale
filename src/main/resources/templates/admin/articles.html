@@ -127,7 +127,7 @@
         },
         mounted: function () {
             this.loadOnce();
-            this.load();
+            this.load(1);
         },
         methods: {
             loadOnce: function(){
@@ -143,11 +143,14 @@
                     }
                 });
             },
-            load: function () {
+            load: function (page) {
                 var $vm = this;
+                var data = tale.copy($vm.search);
+                data.page = page;
+                data.limit = 8;
                 tale.get({
                     url: '/admin/api/articles',
-                    data: $vm.search,
+                    data: data,
                     success: function (data) {
                         $vm.articlePage = data.payload
                     },

@@ -1,6 +1,8 @@
 package com.tale.service;
 
 import com.blade.ioc.annotation.Bean;
+import com.blade.kit.DateKit;
+import com.blade.kit.EncryptKit;
 import com.blade.kit.StringKit;
 import com.tale.bootstrap.TaleConst;
 import com.tale.model.entity.Users;
@@ -33,9 +35,37 @@ public class UserService {
     }
 
     /**
+     * 添加用户
+     */
+    public boolean add(Users user) {
+        int time = DateKit.nowUnix();
+        user.setCreated(time);
+        user.setGroupName(TaleConst.NORMAL_USER_GROUP_NAME);
+        String pwd = EncryptKit.md5(user.getUsername() + user.getPassword());
+        user.setPassword(pwd);
+
+        Integer cid = user.save().asInt();
+        return cid > 0;
+    }
+
+    /**
+     * 修改用户
+     */
+    public boolean update(Users user) {
+        Integer cid = user.getUid();
+        Users oldUser = select(Users::getPassword).from(Users.class).byId(cid);
+        if(!oldUser.getPassword().equals(user.getPassword())) {
+            String pwd = EncryptKit.md5(user.getUsername() + user.getPassword());
+            user.setPassword(pwd);
+        }
+
+        return user.updateById(cid) > 0;
+    }
+
+    /**
      * 根据用户名统计
      */
-    public long countByUsername(TypeFunction<Users, Object> type, Object key) {
+    public long countByCol(TypeFunction<Users, Object> type, Object key) {
         return select().from(Users.class).where(type, key).count();
     }
 
@@ -60,8 +90,8 @@ public class UserService {
      * @param cid 用户id
      */
     public void delete(int cid) {
-        Users user = this.getUser(cid + "");
-        if (null != user) {
+        long count = this.countByCol(Users::getUid, cid);
+        if (count > 0) {
             deleteById(Users.class, cid);
         }
     }

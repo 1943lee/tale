@@ -100,18 +100,16 @@ public class CommonValidator {
     }
 
     public static void valid(Users user) {
-        /*Validators.notEmpty().test(param.getSiteTitle()).throwIfInvalid("网站标题");
-        Validators.notEmpty().test(param.getSiteUrl()).throwIfInvalid("网站URL");
-        Validators.notEmpty().test(param.getAdminUser()).throwIfInvalid("管理员账户");
-        Validators.moreThan(4).test(param.getAdminUser()).throwIfInvalid("管理员账户");
-        Validators.lessThan(20).test(param.getAdminUser()).throwIfInvalid("管理员账户");
+        Validators.notEmpty().test(user.getUsername()).throwIfInvalid("用户名");
+        Validators.moreThan(4).test(user.getUsername()).throwIfInvalid("用户名");
+        Validators.lessThan(20).test(user.getUsername()).throwIfInvalid("用户名");
 
-        Validators.notEmpty().test(param.getAdminPwd()).throwIfInvalid("管理员密码");
+        Validators.notEmpty().test(user.getPassword()).throwIfInvalid("用户密码");
 
-        Validators.moreThan(6).test(param.getAdminPwd()).throwIfInvalid("请输入6-32位密码");
-        Validators.lessThan(32).test(param.getAdminPwd()).throwIfInvalid("请输入6-32位密码");
-        if (StringKit.isNotEmpty(param.getAdminEmail())) {
-            Validators.isEmail().test(param.getAdminEmail()).throwIfInvalid("电子邮箱");
-        }*/
+        Validators.moreThan(6).test(user.getPassword()).throwIfInvalid("请输入6-32位密码");
+        Validators.lessThan(32).test(user.getPassword()).throwIfInvalid("请输入6-32位密码");
+        if (StringKit.isNotEmpty(user.getEmail())) {
+            Validators.isEmail().test(user.getEmail()).throwIfInvalid("电子邮箱");
+        }
     }
 }

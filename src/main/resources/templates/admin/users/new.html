@@ -8,39 +8,39 @@
                 <h3 class="panel-title">添加用户</h3>
             </div>
             <div class="panel-body">
-                <form id="user-form">
-                    ${_csrf_token_input}
+                <form id="user-form" role="form" >
                     <div class="form-group clearfix">
                         <label class="col-md-3 control-label">* 账号</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" required aria-required="true"
-                                   rangelength="[4,20]" placeholder="请输入4-20位用户名"/>
+                            <input type="text" name="username" class="form-control" required aria-required="true"
+                                   rangelength="[4,20]" placeholder="请输入4-20位用户名" v-model="user.username"/>
                         </div>
                     </div>
                     <div class="form-group clearfix">
                         <label class="col-md-3 control-label">* 密码</label>
                         <div class="col-md-9">
-                            <input id="password1" name="adminPwd" class="form-control"
+                            <input name="password" class="form-control" type="text" v-model="user.password"
                                    required aria-required="true" rangelength="[6,32]" placeholder="请输入6-32位密码"/>
                         </div>
                     </div>
                     <div class="form-group clearfix">
                         <label class="col-md-3 control-label">姓名</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" name="screenName" placeholder="输入您的姓名"
-                                   required aria-required="true"/>
+                            <input type="text" class="form-control" name="screenName" placeholder="姓名"
+                                   aria-required="true" v-model="user.screenName"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-3 control-label">邮箱</label>
                         <div class="col-md-9">
-                            <input type="text" class="form-control" name="email" placeholder="输入您的邮箱"
-                                   value="${login_user.email}" required aria-required="true"/>
+                            <input type="email" class="form-control" name="email" placeholder="邮箱"
+                                   aria-required="true" v-model="user.email"/>
                         </div>
                     </div>
-                    <div class="clearfix pull-in">
-                        <button type="button" class="btn btn-primary waves-effect waves-light" onclick="newUser()">
-                            保存信息
+                    <div class="clearfix pull-right">
+                        <a class="btn btn-default waves-effect waves-light" style="margin-top: 15px;margin-right: 10px" href="/admin/users">返回列表</a>
+                        <button type="submit" style="margin-top: 15px;margin-right: 10px" class="btn btn-danger waves-effect waves-light">
+                            添加用户
                         </button>
                     </div>
                 </form>
@@ -57,34 +57,47 @@
     var vm = new Vue({
         el: '#app',
         data: {
-            articlePage: {},
+            user: {
+                uid: '',
+                username: '',
+                password: '',
+                screenName: '',
+                email: '',
+                homeUrl: '',
+                created: '',
+                activated: '',
+                logged: '',
+                groupName: ''
+            },
             isLoading: true
         },
         beforeCreate: function () {
             vueLoding = this.$loading.show();
         },
         methods: {
-            newUser: function (cid) {
-                var param = $('#user-form').serialize();
-                tale.post({
-                    url : '/admin/users/new',
-                    data: param,
-                    success: function (result) {
-                        if(result && result.success){
-                            tale.alertOk({
-                                text: '添加用户成功',
-                                then: function () {
-                                    setTimeout(function () {
-                                        window.location.href = '/admin/users';
-                                    }, 500);
-                                }
-                            });
-                        } else {
-                            tale.alertError(result.msg || '添加用户失败');
-                        }
+        }
+    });
+
+    $('#user-form').validate({
+        submitHandler: function () {
+            tale.post({
+                url : '/admin/api/users/new',
+                data: tale.copy(vm.user),
+                success: function (result) {
+                    if(result && result.success){
+                        tale.alertOk({
+                            text: '添加用户成功',
+                            then: function () {
+                                setTimeout(function () {
+                                    window.location.href = '/admin/users';
+                                }, 500);
+                            }
+                        });
+                    } else {
+                        tale.alertError(result.msg || '添加用户失败');
                     }
-                });
-            }
+                }
+            });
         }
     });
 

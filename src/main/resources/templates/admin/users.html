@@ -33,10 +33,10 @@
                                 <td>{{ item.created | formatUnix }}</td>
                                 <td>{{ item.logged | formatUnix }}</td>
                                 <td>
-                                    <a :href="'/admin/users/edit/' + item.cid" class="btn btn-primary btn-sm waves-effect waves-light m-b-5">
+                                    <a :href="'/admin/users/edit/' + item.uid" class="btn btn-primary btn-sm waves-effect waves-light m-b-5">
                                         <i class="fa fa-edit"></i> <span>编辑</span>
                                     </a>
-                                    <a @click="deleteUser(item.cid)" href="javascript:void(0)" class="btn btn-danger btn-sm waves-effect waves-light m-b-5">
+                                    <a @click="deleteUser(item.uid)" href="javascript:void(0)" class="btn btn-danger btn-sm waves-effect waves-light m-b-5">
                                         <i class="fa fa-trash-o"></i> <span>删除</span>
                                     </a>
                                 </td>
@@ -84,13 +84,17 @@
             vueLoding = this.$loading.show();
         },
         mounted: function () {
-            this.load();
+            this.load(1);
         },
         methods: {
-            load: function () {
+            load: function (page) {
                 var $vm = this;
                 tale.get({
                     url: '/admin/api/users',
+                    data: {
+                        page: page,
+                        limit: 8
+                    },
                     success: function (data) {
                         $vm.normalUsers = data.payload
                     },
@@ -105,8 +109,7 @@
                 tale.alertConfirm({
                     title: '确定删除这个用户吗?', then: function () {
                         tale.post({
-                            url: '/admin/api/users/delete',
-                            data: {cid: cid},
+                            url: '/admin/api/users/delete/' + cid,
                             success: function (result) {
                                 if (result && result.success) {
                                     tale.alertOk('用户删除成功');

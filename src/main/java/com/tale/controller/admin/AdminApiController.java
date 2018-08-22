@@ -441,42 +441,45 @@ public class AdminApiController extends BaseController {
         return RestResponse.ok(users);
     }
 
+    /**
+     * 根据cid获取指定用户
+     */
+    @GetRoute("users/:cid")
+    public RestResponse user(@PathParam String cid) {
+        Users user = userService.getUser(cid);
+        return RestResponse.ok(user);
+    }
+
     @SysLog("添加用户")
     @PostRoute("users/new")
     public RestResponse<?> newUser(@BodyParam Users user) {
-
         CommonValidator.valid(user);
         if(this.user().getUsername().endsWith(user.getUsername())) {
             return RestResponse.fail("不能添加当前用户名");
         }
-        long count = userService.countByUsername(Users::getUsername, user.getUsername());
+        long count = userService.countByCol(Users::getUsername, user.getUsername());
         if(count > 0) {
             return RestResponse.fail("用户名已存在");
         }
 
-
-        return RestResponse.ok();
+        return userService.add(user) ? RestResponse.ok() : RestResponse.fail("添加用户失败");
     }
 
     @SysLog("修改用户")
     @PostRoute("users/update")
-    public RestResponse<?> updateUser(@BodyParam Contents contents) {
-        CommonValidator.valid(contents);
+    public RestResponse<?> updateUser(@BodyParam Users user) {
+        CommonValidator.valid(user);
 
-        if (null == contents.getCid()) {
+        if (null == user.getUid()) {
             return RestResponse.fail("缺少参数，请重试");
         }
-        Integer cid = contents.getCid();
-        contents.setType(Types.PAGE);
-        contentsService.updateArticle(contents);
-        return RestResponse.ok(cid);
+        return userService.update(user) ? RestResponse.ok() : RestResponse.fail("修改用户失败");
     }
 
     @SysLog("删除用户")
-    @PostRoute("page/delete/:cid")
+    @PostRoute("users/delete/:cid")
     public RestResponse<?> deleteUser(@PathParam Integer cid) {
-        contentsService.delete(cid);
-        siteService.cleanCache(Types.C_STATISTICS);
+        userService.delete(cid);
         return RestResponse.ok();
     }
 
