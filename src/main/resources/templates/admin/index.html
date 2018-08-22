@@ -67,11 +67,11 @@
                                 <h4 class="panel-title">最新留言</h4>
                             </div>
                             <div class="panel-body">
-                                <div v-if="comments.length == 0" class="alert alert-warning">
+                                <div v-if="null == comments || comments.length == 0" class="alert alert-warning">
                                     还没有收到留言.
                                 </div>
 
-                                <div v-if="comments.length > 0" class="inbox-widget nicescroll mx-box" tabindex="5000" style="overflow: hidden; outline: none;">
+                                <div v-if="null != comments && comments.length > 0" class="inbox-widget nicescroll mx-box" tabindex="5000" style="overflow: hidden; outline: none;">
                                     <div class="inbox-item" v-for="item in comments">
                                         <div class="inbox-item-img">
                                             <a :href="item.url" target="_blank">

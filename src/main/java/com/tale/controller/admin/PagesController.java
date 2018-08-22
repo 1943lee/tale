@@ -10,6 +10,7 @@ import com.blade.mvc.annotation.Path;
 import com.blade.mvc.annotation.PathParam;
 import com.blade.mvc.http.Request;
 import com.blade.mvc.http.Response;
+import com.tale.bootstrap.TaleConst;
 import com.tale.controller.BaseController;
 import com.tale.extension.Commons;
 import com.tale.service.ContentsService;
@@ -78,7 +79,7 @@ public class PagesController extends BaseController {
             response.redirect("/admin/index");
             return null;
         }
-        return "admin/login";
+        return TaleConst.ADMIN_LOGIN_URI;
     }
 
     @GetRoute("template")
